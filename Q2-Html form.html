@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data Form</title>
+    <link rel="stylesheet" href="">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            align-items: center;
+        }
+
+        h1 {
+            color:darkslategray;
+        }
+
+        #user-form {
+            padding: 10px 0px;
+            width: 60vw;
+            background-color: blanchedalmond;
+            border-radius: 10px ;
+            border: 1px solid black;
+        }
+
+        .form-group {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        .right {
+            display: inline-block;
+            width: 150px;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 200px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 2px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>User Data Form</h1>
+    <center>
+        <form id="user-form">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label class="right">Gender:</label>
+                <input type="radio" id="male" name="gender" value="Male" required>
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="Female" required>
+                <label for="female">Female</label>
+                <input type="radio" id="other" name="gender" value="Other" required>
+                <label for="other">Other</label>
+            </div>
+            <div class="form-group">
+                <label class="right">Interests:</label>
+                <input type="checkbox" id="sports" name="interests" value="Sports">
+                <label for="sports">Sports</label>
+                <input type="checkbox" id="music" name="interests" value="Music">
+                <label for="music">Music</label>
+                <input type="checkbox" id="movies" name="interests" value="Movies">
+                <label for="movies">Movies</label>
+            </div>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" name="country">
+                    <option value="USA">india</option>
+                    <option value="Canada">USA</option>
+                    <option value="UK">china</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </center>
+    <div id="output"></div>
+    <script src="script.js">
+        var form = document.getElementById("user-form");
+        var output = document.getElementById("output");
+
+        form.onsubmit = function (e) {
+            e.preventDefault();
+
+            var name = getInputValue("name");
+            var gender = getSelectedRadioValue("gender");
+            var email = getInputValue("email");
+            var interests = getCheckedInterests();
+            var country = getSelectedValue("country");
+
+            // Validation
+            if (validateForm(name, gender, email, interests, country)) {
+                displayUserData(name, gender, email, interests, country);
+            } else {
+                output.innerHTML = "Please fill in all fields.";
+            }
+        };
+
+        // Helper functions
+        function getInputValue(id) {
+            return document.getElementById(id).value;
+        }
+
+        function getSelectedRadioValue(name) {
+            var radios = document.querySelectorAll('input[name="' + name + '"]:checked');
+            return radios.length > 0 ? radios[0].value : null;
+        }
+
+        function getCheckedInterests() {
+            var interests = [];
+            var checkboxes = document.querySelectorAll('input[name="interests"]:checked');
+            for (var i = 0; i < checkboxes.length; i++) {
+                interests.push(checkboxes[i].value);
+            }
+            return interests;
+        }
+
+        function getSelectedValue(id) {
+            var select = document.getElementById(id);
+            return select.options[select.selectedIndex].value;
+        }
+
+        function validateForm(name, gender, email, interests, country) {
+            return name && gender && email && interests.length > 0 && country !== "Select Country";
+        }
+
+        function displayUserData(name, gender, email, interests, country) {
+            output.innerHTML = `
+        Name: ${name}<br>
+        Gender: ${gender}<br>
+        Email: ${email}<br>
+        Interests: ${interests.join(", ")}<br>
+        Country: ${country}
+    `;
+        }
+
+
+    </script>
+</body>
+
+</html>
